@@ -8,13 +8,10 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import edu.cnm.deepdive.codebreaker.model.entity.Game;
 import edu.cnm.deepdive.codebreaker.service.GameRepository;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
-import org.jetbrains.annotations.NotNull;
 
 public class GameViewModel extends AndroidViewModel implements DefaultLifecycleObserver {
 
@@ -31,6 +28,7 @@ public class GameViewModel extends AndroidViewModel implements DefaultLifecycleO
     throwable = new MutableLiveData<>();
     pending = new CompositeDisposable();
     repository = new GameRepository(application);
+    startGame("ABCDEF", 3);
   }
 
   @Override
@@ -48,15 +46,27 @@ public class GameViewModel extends AndroidViewModel implements DefaultLifecycleO
   }
 
   public void startGame(String pool, int length) {
-     // TODO: Invoke Game Repository.startGame & subscribe to result.
-    // TODO:Add disposable (return from the subscribe) to pending.
+    throwable.setValue(null);
     Disposable disposable = repository
         .startGame(pool, length)
         .subscribe(
             game::postValue,
             this::postThrowable
-
         );
+    pending.add(disposable);
+  }
+
+  public void submitGuess(String text) {
+    throwable.setValue(null);
+    Game game = this.game.getValue();
+    Disposable disposable = repository
+        .submitGuess(game, text)
+        .subscribe(
+            (guess) -> this.game.postValue(game),
+            this::postThrowable
+        );
+    pending.add(disposable);
+
   }
 
   private void postThrowable(Throwable throwable) {
