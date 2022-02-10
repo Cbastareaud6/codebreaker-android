@@ -8,6 +8,7 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import edu.cnm.deepdive.codebreaker.R;
 import edu.cnm.deepdive.codebreaker.model.entity.Game;
 import edu.cnm.deepdive.codebreaker.service.GameRepository;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -19,6 +20,7 @@ public class GameViewModel extends AndroidViewModel implements DefaultLifecycleO
   private final MutableLiveData<Throwable> throwable;
   private final CompositeDisposable pending;
   private final GameRepository repository;
+  private final String pool;
 
 
   public GameViewModel(
@@ -28,7 +30,8 @@ public class GameViewModel extends AndroidViewModel implements DefaultLifecycleO
     throwable = new MutableLiveData<>();
     pending = new CompositeDisposable();
     repository = new GameRepository(application);
-    startGame("ABCDEF", 3);
+    pool = application.getString(R.string.color_chars);
+    startGame();
   }
 
   @Override
@@ -45,10 +48,10 @@ public class GameViewModel extends AndroidViewModel implements DefaultLifecycleO
     return throwable;
   }
 
-  public void startGame(String pool, int length) {
+  public void startGame() {
     throwable.setValue(null);
     Disposable disposable = repository
-        .startGame(pool, length)
+        .startGame(pool,3 ) // FIXME: read length from preferences.
         .subscribe(
             game::postValue,
             this::postThrowable
@@ -59,6 +62,7 @@ public class GameViewModel extends AndroidViewModel implements DefaultLifecycleO
   public void submitGuess(String text) {
     throwable.setValue(null);
     Game game = this.game.getValue();
+    //noinspection ConstantConditions
     Disposable disposable = repository
         .submitGuess(game, text)
         .subscribe(
