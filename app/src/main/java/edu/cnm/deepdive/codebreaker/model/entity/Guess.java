@@ -14,7 +14,7 @@ import java.util.Date;
 
 @SuppressWarnings("unused")
 @Entity(
-    tableName = "guesses",
+    tableName = "guess",
     foreignKeys = {
         @ForeignKey(
             entity = Game.class,
