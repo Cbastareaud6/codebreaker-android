@@ -6,6 +6,8 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
+import edu.cnm.deepdive.codebreaker.model.dao.GameDao;
+import edu.cnm.deepdive.codebreaker.model.dao.GuessDao;
 import edu.cnm.deepdive.codebreaker.model.entity.Game;
 import edu.cnm.deepdive.codebreaker.model.entity.Guess;
 import edu.cnm.deepdive.codebreaker.service.CodebreakerDatabase.Converters;
@@ -13,7 +15,7 @@ import java.util.Date;
 
 @Database(
     entities = {Game.class, Guess.class},
-    version = 1;
+    version = 1,
     exportSchema = true
 )
 @TypeConverters({Converters.class})
@@ -31,6 +33,10 @@ public abstract class CodebreakerDatabase extends RoomDatabase {
     return InstanceHolder.INSTANCE;
   }
 
+  public abstract GameDao getGameDao();
+
+  public abstract GuessDao getGuessDao();
+
   private static class InstanceHolder {
 
     private static final CodebreakerDatabase INSTANCE =
@@ -44,11 +50,11 @@ public abstract class CodebreakerDatabase extends RoomDatabase {
     public static Long toLong(Date value) {
       return (value != null) ? value.getTime() : null;
     }
-  }
 
-  @TypeConverter
-  public static Date toDate(Long value) {
-    return (value != null) ? new Date(value) : null;
-  }
 
+    @TypeConverter
+    public static Date toDate(Long value) {
+      return (value != null) ? new Date(value) : null;
+    }
+  }
 }
