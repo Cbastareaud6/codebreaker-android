@@ -3,7 +3,7 @@
 <ImageView
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
+  android:layout_width="@dimen/swatch_size"
   android:layout_height="@dimen/swatch_size"
   android:layout_margin="@dimen/half_static_spacing"
   tools:ignore="ContentDescription"
