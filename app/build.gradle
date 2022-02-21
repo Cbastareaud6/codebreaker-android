@@ -63,14 +63,14 @@ dependencies {
     implementation "androidx.navigation:navigation-ui:$navigationVersion"
 
     // Lifecycle (Livedata & ViewModel)
-    def lifecycleVersion = '2.4.0'
+    def lifecycleVersion = '2.4.1'
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycleVersion"
 
 
     // Gson library.
-    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.google.code.gson:gson:2.9.0'
 
     // Retrofit & OkHttp libraries.
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
@@ -100,6 +100,10 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+}
+
+repositories {
 
 }
 
