@@ -41,6 +41,7 @@ public class LoginViewModel extends AndroidViewModel implements DefaultLifecycle
   }
 
   public void refresh() {
+    throwable.setValue(null);
     Disposable disposable = signInService
         .refresh()
         .subscribe(
@@ -52,6 +53,7 @@ public class LoginViewModel extends AndroidViewModel implements DefaultLifecycle
   }
 
   public void completeSignIn(ActivityResult result) {
+    throwable.setValue(null);
     Disposable disposable = signInService
         .completeSignIn(result)
         .subscribe(
@@ -66,6 +68,7 @@ public class LoginViewModel extends AndroidViewModel implements DefaultLifecycle
   }
 
   public void signOut() {
+    throwable.setValue(null);
     Disposable disposable = signInService
         .signOut()
         .doFinally(() -> account.postValue(null))
@@ -74,6 +77,7 @@ public class LoginViewModel extends AndroidViewModel implements DefaultLifecycle
             },
             this::postThrowable
         );
+    pending.add(disposable);
   }
 
   @Override
