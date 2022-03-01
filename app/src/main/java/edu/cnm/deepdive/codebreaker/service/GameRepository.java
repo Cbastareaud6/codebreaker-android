@@ -1,11 +1,13 @@
 package edu.cnm.deepdive.codebreaker.service;
 
 import android.content.Context;
+import androidx.lifecycle.LiveData;
 import edu.cnm.deepdive.codebreaker.model.dao.GameDao;
 import edu.cnm.deepdive.codebreaker.model.dao.GuessDao;
 import edu.cnm.deepdive.codebreaker.model.entity.Game;
 import edu.cnm.deepdive.codebreaker.model.entity.Guess;
 import edu.cnm.deepdive.codebreaker.model.pojo.GameWithGuesses;
+import edu.cnm.deepdive.codebreaker.model.view.GameSummary;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -50,6 +52,9 @@ public class GameRepository {
       .subscribeOn(Schedulers.io());
   }
 
+  public LiveData<GameSummary>  getSummary(int length){
+    return gameDao.getSummary(length);
+  }
   private Single<GameWithGuesses> persist(GameWithGuesses game){
     return gameDao
         .insert(game)
