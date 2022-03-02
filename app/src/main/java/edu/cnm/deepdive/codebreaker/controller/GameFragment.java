@@ -56,7 +56,8 @@ public class GameFragment extends Fragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    gameViewModel = new ViewModelProvider(this)
+    //noinspection ConstantConditions
+    gameViewModel = new ViewModelProvider(getActivity())
         .get(GameViewModel.class);
     gameViewModel
         .getThrowable()
