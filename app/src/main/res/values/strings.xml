@@ -13,6 +13,7 @@
   <string name="near_matches">Near matches</string>
 
 
+
   <string name="code_length_pref_key">code_length_pref</string>
 
   <string name="code_length_pref_title">Code length</string>
@@ -26,6 +27,10 @@
   <string name="minimum_label">Minimum:</string>
   <string name="maximum_label">Maximum:</string>
   <string name="average_label">Average</string>
+  <string name="count_games_label">Total games played:</string>
+
+  <string name="mmss_format">%1$02d:%2$02d</string>
+  <string name="avg_guess_format">%3.1f</string>
 
   <string-array name="color_labels">
     <item>Red</item>
