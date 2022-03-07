@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "6b5dc7fd37b397ba13cedf402c193a55",
+    "identityHash": "7fcfec11e2abdd8d34ad611f4f891220",
     "entities": [
       {
         "tableName": "game",
@@ -154,11 +154,15 @@
       {
         "viewName": "game_summary",
         "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT\n    gs.length,\n    COUNT (*) AS count_games,\n    MIN(gs.guess_count) AS min_guesses,\n    MAX(gs.guess_count) AS max_guesses,\n    AVG(gs.guess_count) AS avg_guesses,\n    MIN (gs.last_guess_timestamp - gs.first_guess_timestamp) AS min_time,\n    MAX (gs.last_guess_timestamp - gs.first_guess_timestamp) AS max_time,\n    AVG (gs.last_guess_timestamp - gs.first_guess_timestamp) AS avg_time\n FROM (\n     SELECT\n        ga.length,\n        gu.game_id,\n        COUNT(*) AS guess_count,\n        MIN(gu.created) AS first_guess_timestamp,\n        MAX(gu.created) AS last_guess_timestamp\n     FROM\n        guess as gu\n        INNER JOIN game as ga\n            ON gu.game_id = ga.game_id\n     GROUP BY\n        ga.length,\n        gu.game_id\n) AS gs\nGROUP BY\n    gs.length"
+      },
+      {
+        "viewName": "game_performance",
+        "createSql": "CREATE VIEW `${VIEW_NAME}` AS SELECT\ng.game_id,\ng.created,\ng.length,\n(gs.last_guess_timestamp - gs.first_guess_timestamp)  AS duration,\ngs.guess_count\nFROM\n    game AS g\nJOIN(\nSELECT\n    game_id,\n    MIN(created) AS first_guess_timestamp,\n    MAX(created) AS last_guess_timestamp,\n    COUNT (*) AS guess_count\nFROM\n   guess\nGROUP BY\ngame_id\n  ) AS gs\n  ON gs.game_id = g.game_id"
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6b5dc7fd37b397ba13cedf402c193a55')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7fcfec11e2abdd8d34ad611f4f891220')"
     ]
   }
 }
