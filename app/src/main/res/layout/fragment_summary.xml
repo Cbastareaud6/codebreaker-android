@@ -79,13 +79,13 @@
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toTopOf="@id/time_label"/>
 
+
   <androidx.constraintlayout.widget.Guideline
     android:id="@+id/label_vertical_guideline"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     app:layout_constraintGuide_percent="0.1"/>
-
   <androidx.constraintlayout.widget.Barrier
     android:id="@+id/value_barrier"
     android:layout_width="wrap_content"
