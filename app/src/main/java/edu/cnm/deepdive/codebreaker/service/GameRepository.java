@@ -18,6 +18,9 @@ import java.util.function.Function;
 
 public class GameRepository {
 
+  // TODO MOdiy methos that evokes service proxy methods, to get and pass the bearer token
+
+
   private final Context context;
   private final CodebreakerServiceProxy proxy;
   private final GameDao gameDao;

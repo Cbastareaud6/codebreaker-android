@@ -25,10 +25,14 @@ public interface CodebreakerServiceProxy {
 
   String ISO_8601_DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
+  //TODO add bearer token parameter to service proxy methods
+
   @POST ("games")
   Single<GameWithGuesses> startGame(@Body Game game);
   @POST("games/{gameId}/guesses")
   Single<Guess> submitGuess(@Path ("gameId") String gameId,  @Body Guess guess);
+
+  // todo ADd more service proxy methods for  retrieving and modifying user profile retrieve game specific top scores and retrieving top average scores
 
   static CodebreakerServiceProxy getInstance() {
     return InstanceHolder.INSTANCE;
