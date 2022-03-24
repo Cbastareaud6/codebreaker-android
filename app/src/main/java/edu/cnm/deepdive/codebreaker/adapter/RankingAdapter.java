@@ -73,5 +73,6 @@ public class RankingAdapter extends RecyclerView.Adapter<Holder> {
       binding.duration.setText(String.format(durationFormat, minutes, seconds));
 
     }
+
   }
 }
