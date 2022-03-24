@@ -38,15 +38,20 @@
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      android:layout_weight="1"/>
+      android:layout_weight="1"
+      android:visibility="invisible"/>
 
 
-    <Button
+    <ImageButton
       android:id="@+id/submit"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/submit_text"
-      android:layout_marginEnd="@dimen/half_dynamic_spacing"/>
+      android:src="@drawable/ic_baseline_send_24"
+      android:background="?android:selectableItemBackgroundBorderless"
+      android:tint="?attr/colorAccent"
+      android:contentDescription="@string/submit_text"
+      android:padding="@dimen/half_dynamic_spacing"
+      android:layout_marginEnd="@dimen/half_static_spacing"/>
   </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
