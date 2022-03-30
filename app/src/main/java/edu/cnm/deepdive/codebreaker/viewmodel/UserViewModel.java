@@ -12,24 +12,30 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import edu.cnm.deepdive.codebreaker.model.dto.User;
 import edu.cnm.deepdive.codebreaker.service.GoogleSignInService;
+import edu.cnm.deepdive.codebreaker.service.UserRepository;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 
-public class LoginViewModel extends AndroidViewModel implements DefaultLifecycleObserver {
+public class UserViewModel extends AndroidViewModel implements DefaultLifecycleObserver {
   // TODO Add UI controller accessible methods for getting and modifying user profile information.
 
   private final GoogleSignInService signInService;
+  private final UserRepository userRepository;
+  private final MutableLiveData<User> user;
   private final MutableLiveData<GoogleSignInAccount> account;
   private final MutableLiveData<Throwable> throwable;
   private final CompositeDisposable pending;
 
-  public LoginViewModel(@NonNull Application application) {
+  public UserViewModel(@NonNull Application application) {
     super(application);
     signInService = GoogleSignInService.getInstance();
     account = new MutableLiveData<>();
+    user = new MutableLiveData<>();
     throwable = new MutableLiveData<>();
     pending = new CompositeDisposable();
+    userRepository= new UserRepository(application);
     refresh();
   }
 
@@ -79,6 +85,27 @@ public class LoginViewModel extends AndroidViewModel implements DefaultLifecycle
             this::postThrowable
         );
     pending.add(disposable);
+  }
+
+  public LiveData<User> getUser() {
+    throwable.setValue(null);
+    Disposable disposable = userRepository
+        .getProfile()
+        .subscribe((u) -> user.postValue(u),
+    (throwable)-> postThrowable(throwable));
+    pending.add(disposable);
+    return user;
+  }
+
+  public void updateUser (User user) {
+    throwable.setValue(null);
+    Disposable disposable = userRepository
+        .updateProfile(user)
+        .subscribe(
+            (this.user::postValue),
+            this::postThrowable
+        );
+       pending.add(disposable);
   }
 
   @Override
