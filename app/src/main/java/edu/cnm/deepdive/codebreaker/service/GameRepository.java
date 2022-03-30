@@ -18,13 +18,14 @@ import java.util.function.Function;
 
 public class GameRepository {
 
-  // TODO MOdiy methos that evokes service proxy methods, to get and pass the bearer token
+  // TODO Modify methods that evokes service proxy methods, to get and pass the bearer token
 
 
   private final Context context;
   private final CodebreakerServiceProxy proxy;
   private final GameDao gameDao;
   private final GuessDao guessDao;
+  private final GoogleSignInService signInService;
 
 
   public GameRepository(Context context) {
@@ -33,28 +34,32 @@ public class GameRepository {
     CodebreakerDatabase database = CodebreakerDatabase.getInstance();
     gameDao = database.getGameDao();
     guessDao = database.getGuessDao();
+    signInService = GoogleSignInService.getInstance();
   }
   public Single<GameWithGuesses> startGame(String pool, int length){
     Game game = new Game();
     game.setPool(pool);
     game.setLength(length);
-    return proxy
-        .startGame(game)
-        .subscribeOn(Schedulers.io());
-
+    return signInService
+        .refreshBearerToken()
+            .observeOn(Schedulers.io())
+                .flatMap((token) -> proxy.startGame(game, token));
   }
 
   public Single<GameWithGuesses> submitGuess(GameWithGuesses game, String text){
   Guess guess = new Guess();
   guess.setText(text);
-  return proxy
-      .submitGuess(game.getServiceKey(), guess)
+  return
+      signInService
+          .refreshBearerToken()
+          .observeOn(Schedulers.io())
+          .flatMap((token) -> proxy.submitGuess(game.getServiceKey(), guess, token))
+
       .map( (g) -> {
         game.getGuesses().add(g);
         return g;
       })
-      .flatMap((g) -> g.isSolution() ?persist(game ):Single.just(game))
-      .subscribeOn(Schedulers.io());
+      .flatMap((g) -> g.isSolution() ?persist(game ):Single.just(game));
   }
 
   public LiveData<GameSummary>  getSummary(int length){

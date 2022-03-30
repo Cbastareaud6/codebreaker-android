@@ -18,6 +18,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -28,11 +29,11 @@ public interface CodebreakerServiceProxy {
   //TODO add bearer token parameter to service proxy methods
 
   @POST ("games")
-  Single<GameWithGuesses> startGame(@Body Game game);
+  Single<GameWithGuesses> startGame(@Body Game game,@Header("Authorization") String bearerToken);
   @POST("games/{gameId}/guesses")
-  Single<Guess> submitGuess(@Path ("gameId") String gameId,  @Body Guess guess);
+  Single<Guess> submitGuess(@Path ("gameId") String gameId,  @Body Guess guess, @Header("Authorization") String bearerToken);
 
-  // todo ADd more service proxy methods for  retrieving and modifying user profile retrieve game specific top scores and retrieving top average scores
+  // todo Add more service proxy methods for  retrieving and modifying user profile retrieve game specific top scores and retrieving top average scores
 
   static CodebreakerServiceProxy getInstance() {
     return InstanceHolder.INSTANCE;
