@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import edu.cnm.deepdive.codebreaker.BuildConfig;
+import edu.cnm.deepdive.codebreaker.model.dto.User;
 import edu.cnm.deepdive.codebreaker.model.entity.Game;
 import edu.cnm.deepdive.codebreaker.model.entity.Guess;
 import edu.cnm.deepdive.codebreaker.model.pojo.GameWithGuesses;
@@ -18,8 +19,10 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface CodebreakerServiceProxy {
@@ -33,6 +36,12 @@ public interface CodebreakerServiceProxy {
   @POST("games/{gameId}/guesses")
   Single<Guess> submitGuess(@Path ("gameId") String gameId,  @Body Guess guess, @Header("Authorization") String bearerToken);
 
+  @GET("users/me")
+  Single<User> getProfile(@Header("Authorization")String bearerToken);
+
+  @PUT("users/me")
+  Single<User> updateProfile(@Body User user, @Header("Authorization")String bearerToken);
+  
   // todo Add more service proxy methods for  retrieving and modifying user profile retrieve game specific top scores and retrieving top average scores
 
   static CodebreakerServiceProxy getInstance() {
